@@ -14,8 +14,23 @@ class Cell(object):
         self.my_ants = my_ants
         self.opp_ants = opp_ants
 
+def richest_cell(cells,cell_type):
+    richest = None
+    for i in cells:
+        if richest == None:
+            richest = i
+        elif i.cell_type == cell_type and i.resources > richest.resources:
+            richest = i
+    return richest
+
+def build_map():
+    pass
+
+def distance(cellA,cellB):
+    pass
 
 cells: list[Cell] = []
+
 
 number_of_cells = int(input())  # amount of hexagonal cells in this map
 for i in range(number_of_cells):
@@ -46,6 +61,8 @@ opp_bases: list[int] = []
 for i in input().split():
     opp_base_index = int(i)
     opp_bases.append(opp_base_index)
+targets = []
+targets.append(richest_cell(cells,2))
 
 # game loop
 while True:
@@ -60,7 +77,21 @@ while True:
         cells[i].opp_ants = opp_ants
 
     # WAIT | LINE <sourceIdx> <targetIdx> <strength> | BEACON <cellIdx> <strength> | MESSAGE <text>
+    
+    
     actions = []
+    if richest_cell(cells,2) not in targets:
+        targets.append(richest_cell(cells,2))
+    if richest_cell(cells,1) not in targets:
+        targets.append(richest_cell(cells,1))
+
+    for i,target in enumerate(targets):
+        if target.resources == 0:
+            targets.pop(i)
+
+    for target in targets:
+            actions.append("LINE "+str(my_bases[0])+" "+str(target.index)+" 1")
+        
 
     # TODO: choose actions to perform and push them into actions
     # To debug: print("Debug messages...", file=sys.stderr, flush=True)
